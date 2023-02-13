@@ -1,27 +1,29 @@
 import React from 'react';
 import CartItem from './CartItem';
+import { connect } from 'react-redux';
+import { close, open } from '../store/action'
 
 class Cart extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      isOpen: false,
-    };
+  
   }
-  close = () => {
-    this.setState({ isOpen: false });
+  handleClose = () => {
+    // this.setState({ isOpen: false });
+    this.props.dispatch(close(false))
   };
-  open = () => {
-    this.setState({ isOpen: true });
+  handleOpen = () => {
+    // this.setState({ isOpen: true });
+    this.props.dispatch(open(true))
   };
   render() {
-    const { isOpen } = this.state;
+    const { isOpen } = this.props;
     if (!isOpen) {
-      return <ClosedCart open={this.open} />;
+      return <ClosedCart open={this.handleOpen} />;
     }
     return (
       <aside className='cart'>
-        <div onClick={this.close} className='close-btn'>
+        <div onClick={this.handleClose} className='close-btn'>
           X
         </div>
         <div className='cart-body'>
@@ -87,4 +89,11 @@ function ClosedCart(props) {
   );
 }
 
-export default Cart;
+
+function mapStateToProps(state){
+  return {
+    isOpen: state.isOpen
+  }
+}
+
+export default connect(mapStateToProps)(Cart);

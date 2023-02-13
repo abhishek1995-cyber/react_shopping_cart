@@ -1,15 +1,18 @@
 import React from "react";
 import OrderBy from "./OrderBy";
+import { connect } from 'react-redux'
+import { selectOrder } from '../store/action'
 
 class Products extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      selectedOrder: "",
-    };
+   
   }
   handleOrderBy = (event) => {
-    this.setState({ selectedOrder: event.target.value });
+    // this.setState({ selectedOrder: event.target.value });
+    let value = event.target.value;
+     console.log(value,this.props, 'check')
+    this.props.dispatch(selectOrder(value))
   };
 
   handleOrderProducts = (order, products) => {
@@ -24,7 +27,7 @@ class Products extends React.Component {
   };
 
   render() {
-    let { selectedOrder } = this.state;
+    let { selectedOrder } = this.props;
     let products = this.handleOrderProducts(selectedOrder, this.props.data);
 
     return (
@@ -70,4 +73,10 @@ function Product(props) {
     </div>
   );
 }
-export default Products;
+
+function mapStateToProps(state){
+  return {
+    selectedOrder : state.selectedOrder,
+  }
+}
+export default connect(mapStateToProps)(Products);
